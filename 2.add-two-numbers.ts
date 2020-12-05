@@ -27,22 +27,37 @@
 // }
 
 
-function listNodeTotal(list: ListNode): string {
-  let str = list.val.toString();
-  if (!list.next) {
-    return str += listNodeTotal(list.next);
+function listNodeTotal(list: ListNode | null, str: string): string {
+  if (list !== null) {
+    if (!list.next) {
+      return str += listNodeTotal(list.next, str);
+    } else {
+      return str += list.val;
+    }
   } else {
-    return str += list.val;
+    return '';
   }
 }
 
-function numberToListNode(num: string): ListNode {
-  const list = num.split('');
-  return { val: Number(num), next: null };
+function numberToListNode(list: string[], listNode?: ListNode | null): ListNode | null {
+  const index = list.length;
+  if (index > 0) {
+    return index === 1 ? { val: Number(list[index]), next: null } :
+      { val: Number(list[index]), next: numberToListNode(list.slice(0, index - 1)) }
+  } else {
+    return null;
+  }
 }
 
 function addTwoNumbers(l1: ListNode | null, l2: ListNode | null): ListNode | null {
-  return numberToListNode(listNodeTotal(l1) + listNodeTotal(l2));
+  const nums = Number(listNodeTotal(l1, l1.val.toString())) +
+    Number(listNodeTotal(l2, l2.val.toString()));
+  const list = nums.toString().split('');
+  console.log(l1);
+  console.log(l2);
+  console.log(nums);
+  console.log(list);
+  return numberToListNode(list);
 };
 
 // @lc code=end
